@@ -1,0 +1,106 @@
+{% extends "base.html" %} {% block title %}Expenses{% endblock %} {% block content%}
+<h1 align="center">Expenses</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Description</th>
+      <th scope="col">Category</th>
+      <th scope="col">Expense Date</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Submit Time</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for expense in user.expenses %}
+      <tr>
+        <th scope="row">{{ expense.id }}</th>
+        <td scope="col">{{ expense.description }} </td>
+        <td scope="col">{{ expense.category }}</td>
+        <td scope="col">{{ expense.expensedate.strftime('%Y-%m-%d') }}</td>
+        <td scope="col">{{ expense.amount }}</td>
+        <td scope="col">{{ expense.submittime.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        <td scope="col">
+          <button type="button" class="close" onClick="deleteExpense({{ expense.id }})">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </td>
+      </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExpense">
+  Add Expense
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="addExpense" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Expense</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input
+            type="description"
+            class="form-control"
+            id="description"
+            name="description"
+            placeholder="Enter description"
+          />
+        </div>
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select class="custom-select" name="category" size="1">
+            <option selected>Open this select menu</option>
+            {% for category in categories %}
+              <option value="{{ category.name }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="expensedate">Expense Date</label>
+          <input
+            type="date"
+            class="form-control"
+            id="expensedate"
+            name="expensedate"
+            placeholder="Enter Expense Date"
+          />
+        </div>
+        <div class="form-group">
+          <label for="amount">Amount</label>
+          <input
+            type="number"
+            step=0.01
+            class="form-control"
+            id="amount"
+            name="amount"
+            placeholder="Enter Amount"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
