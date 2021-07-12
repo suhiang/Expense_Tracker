@@ -11,6 +11,8 @@ import json
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
+from sqlalchemy.ext.declarative import DeclarativeMeta
+
 # Converts a list of SQL Alchemy RowProxy objects into a list of dictionary objects with the column name as the key (https://github.com/cs50/python-cs50/blob/develop/src/cs50/sql.py#L328)
 # Used for SQL SELECT .fetchall() results
 def convertSQLToDict(listOfRowProxy):
@@ -115,4 +117,16 @@ def getTotalMonthlySpend(userID):
 
     getTotalMonthlySpend = convertSQLToDict(results)
 
-    return getTotalMonthlySpend
+
+    return results
+
+    # Get and return the users total spend for the each month
+def getTotalMonthlySpendJson(userID):
+    results = db.session.execute(
+        "SELECT SUM(amount) AS amount, strftime('%m', expensedate) AS month, strftime('%Y', expensedate) AS year from expense \
+        WHERE user_id = :usersID GROUP BY strftime('%m', expensedate)+strftime('%Y', expensedate) \
+        ORDER BY YEAR DESC, MONTH DESC ",
+        {"usersID": userID}).fetchall()
+
+    app_json = json.dumps(convertSQLToDict(results),sort_keys=True)
+    return app_json

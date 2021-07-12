@@ -1,3 +1,4 @@
+import requests
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from .models import Note, Categories, Expense
@@ -5,8 +6,8 @@ from . import db
 import json
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-
 from . import dashboard
+import requests
 
 views = Blueprint('views', __name__)
 
@@ -116,3 +117,122 @@ def delete_category():
 
     return jsonify({})
 
+@views.route('/reports', methods=['GET'])
+@login_required
+def reports():
+    expensesCurrentmonth = dashboard.getTotalSpend_Month(current_user.id)
+    print('Total expense for this month',expensesCurrentmonth)
+
+    SpendingTrends = dashboard.getSpendingTrends(current_user.id)
+    print('Spending Trends for this month',SpendingTrends)
+
+    expensesMonthly = dashboard.getTotalMonthlySpend(current_user.id)
+
+    href = 'http://127.0.0.1:5000/api/v1/expense/monthly'
+    params = {
+    'type': 'monthly',
+    'userid': 1,
+    }
+    # return requests.get('http://example.com').content
+    # expensesMonthly = requests.get('http://127.0.0.1:5000/api/v1/expense/monthly')
+    expensesMonthlyJson = dashboard.getTotalMonthlySpendJson(current_user.id)
+
+    js=json.loads(expensesMonthlyJson)
+    print('Test 1 - Monthly Spending',expensesMonthly)
+    print('Test 2 - Monthly Spending Json', js)   # Jinja parses json with single quote!!!
+    print('Test 3 - Monthly Spending Json', expensesMonthlyJson) # Jinja uunable to parse json with double quote!!!
+
+
+    return render_template("reports.html", user=current_user, expensesMonthly=js, expensesMonthlyJson=js)
+
+@views.route('/api/v1/expense/monthly', methods=['GET'])
+def api_monthly():
+    # http://127.0.0.1:5000/api/v1/expense/monthly
+    type = request.args.get('type')
+    # expensesCurrentmonth = dashboard.getTotalMonthlySpend(current_user.id)
+    expensesCurrentmonth = dashboard.getTotalMonthlySpendJson(1)
+    print(expensesCurrentmonth)
+    return expensesCurrentmonth
+
+@views.route('/api/v1/expense/monthly/all', methods=['GET'])
+def api_monthlyTotal_all():
+    # http://127.0.0.1:5000/api/v1/expense/monthly/all
+    expensesCurrentmonth = dashboard.getTotalSpend_Month(current_user.id)
+    return jsonify(expensesCurrentmonth)
+
+@views.route('/api/v1/expense/monthly/trend', methods=['GET'])
+def api_monthlyTotal_trend():
+    # http://127.0.0.1:5000/api/v1/expense/monthly/trend
+    expensesCurrentmonth = dashboard.getSpendingTrends(current_user.id)
+    return jsonify(expensesCurrentmonth)
+
+
+# Examples of API query ------------------------------------------------------------------
+
+@views.route('/query-example', methods=['GET'])
+def query_example():
+    # http://127.0.0.1:5000/query-example?language=Python
+    # http://127.0.0.1:5000/query-example?language=Python&framework=Flask&website=DigitalOcean
+    # if key doesn't exist, returns None
+    language = request.args.get('language')
+
+    # if key doesn't exist, returns a 400, bad request error
+    framework = request.args['framework']
+
+    # if key doesn't exist, returns None
+    website = request.args.get('website')
+
+    return '''
+              <h1>The language value is: {}</h1>
+              <h1>The framework value is: {}</h1>
+              <h1>The website value is: {}'''.format(language, framework, website)
+
+
+# GET requests will be blocked
+"""
+    {
+        "language" : "Python",
+        "framework" : "Flask",
+        "website" : "Scotch",
+        "version_info" : {
+            "python" : "3.9.0",
+            "flask" : "1.1.2"
+        },
+        "examples" : ["query", "form", "json"],
+        "boolean_test" : true
+    }
+"""
+@views.route('/json-example', methods=['POST'])
+def json_example():
+    request_data = request.get_json()
+
+    language = None
+    framework = None
+    python_version = None
+    example = None
+    boolean_test = None
+
+    if request_data:
+        if 'language' in request_data:
+            language = request_data['language']
+
+        if 'framework' in request_data:
+            framework = request_data['framework']
+
+        if 'version_info' in request_data:
+            if 'python' in request_data['version_info']:
+                python_version = request_data['version_info']['python']
+
+        if 'examples' in request_data:
+            if (type(request_data['examples']) == list) and (len(request_data['examples']) > 0):
+                example = request_data['examples'][0]
+
+        if 'boolean_test' in request_data:
+            boolean_test = request_data['boolean_test']
+
+    return '''
+           The language value is: {}
+           The framework value is: {}
+           The Python version is: {}
+           The item at index 0 in the example list is: {}
+           The boolean value is: {}'''.format(language, framework, python_version, example, boolean_test)
