@@ -55,8 +55,15 @@ Go to `http://127.0.0.1:5000`
 
 ## Notes:
 1. Initial report is currently limited to current month spending.
-2. rewrite APIs to handle
-    1. Scenarios to GET various expense using API request  with year and month (and userId)
-    2. Add GUI
-3. Explore methods to display expense: Tabular versus Charts
-    1. Find approach for Charts (tech: js?)
+2. rewrite APIs to handle query parameters
+    1. Scenarios to GET various expense using API request with parameters like year and month (and userId)
+3. Add/Enhanced GUI
+    1. Explore methods to display expense: Tabular versus Charts
+    2. Scout approach for Charts
+        - tech: e.g. jscript
+        - speed to delivery
+        - suitability
+        - support
+        - features
+4. Decide on a host for the Python Flash App
+    - Heroku : [e.g](https://realpython.com/flask-by-example-part-1-project-setup/)
