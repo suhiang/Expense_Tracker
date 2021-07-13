@@ -19,31 +19,32 @@ Do design the following based on your expertise and frameworks that you are comf
 4.	Deployment (eg. two or three tiers implementation)
 5.	Documentation (A simple architecture diagram to show the entire system components)
 
-
-## Setup & Installation
-
-Make sure you have the latest version of Python installed.
-- Installed version 3.8
-
-
-```
-C:\Users\suhia\AppData\Local\Programs\Python\Python38-32\python.exe -m venv env
-env\Scripts\activate
-```
-
-```bash
-pip install -r requirements.txt
-```
-
 ## Components used
 1. Python Flask
 2. SQLite
 2. SQL Alchemy
 3. Bootstrap
 
-## Running The App
+## Setup & Installation
 
-```bash
+1. Make sure you have the latest version of Python installed.
+`Installed version 3.8 (developed using 3.8)`
+2. Clone from github
+3. Open folder using desired cli
+4. Setup environment using desired python version (MS Win)
+    - PoSh:
+    'C:\Users\suhia\AppData\Local\Programs\Python\Python38-32\python.exe -m venv env`
+5. Activate environment
+    - PoSh:
+        `env\Scripts\activate`
+    - Bash:
+        `env/Scripts/activate`
+6. Install requiremens in environment
+    - PoSh/Bash:
+        `pip install -r requirements.txt`
+
+## Running The App
+```
 python main.py
 ```
 
@@ -52,4 +53,10 @@ python main.py
 Go to `http://127.0.0.1:5000`
 
 
-## Assumptions
+## Notes:
+1. Initial report is currently limited to current month spending.
+2. rewrite APIs to handle
+    1. Scenarios to GET various expense using API request  with year and month (and userId)
+    2. Add GUI
+3. Explore methods to display expense: Tabular versus Charts
+    1. Find approach for Charts (tech: js?)
