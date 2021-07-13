@@ -30,7 +30,7 @@ Do design the following based on your expertise and frameworks that you are comf
 1. Make sure you have the latest version of Python installed.
 `Installed version 3.8 (developed using 3.8)`
 2. Clone from github
-3. Open folder using desired cli
+3. Navigate to folder using desired cli (MSWIN: PoSh)
 4. Setup environment using desired python version (MS Win)
     - PoSh:
     'C:\Users\suhia\AppData\Local\Programs\Python\Python38-32\python.exe -m venv env`
