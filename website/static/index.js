@@ -21,7 +21,7 @@ function deleteExpense(expenseId) {
     method: "POST",
     body: JSON.stringify({ expenseId: expenseId }),
   }).then((_res) => {
-    window.location.href = "/expenses";
+    window.location.href = "/";
   });
 }
 

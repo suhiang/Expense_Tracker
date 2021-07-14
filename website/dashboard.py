@@ -34,7 +34,7 @@ def convertSQLToDict(listOfRowProxy):
 
 
     results = db.session.execute(
-        "SELECT SUM(amount) AS expenses_month FROM expenses WHERE user_id = :usersID AND strftime('%Y',expensedate) = strftime('%Y',date('now')) AND strftime('%m',expensedate) = strftime('%m',date('now'))",
+        "SELECT SUM(amount) AS expenses_month FROM expenses WHERE user_id = :usersID AND EXTRACT(YEAR FROM expensedate) = EXTRACT(YEAR FROM now()) AND EXTRACT(MONTH FROM expensedate) = EXTRACT(MONTH FROM now())",
         {"usersID": current_user.id}).fetchall()
     print(results)
 
@@ -45,7 +45,7 @@ def getCurrentMthSpendingTrends(userID):
     categoryTrend = {"name": None, "proportionalAmount": None,
                      "totalSpent": None, "totalCount": None}
 
-    results = db.session.execute("SELECT category, COUNT(category) as count, SUM(amount) as amount FROM expenses WHERE user_id = :usersID AND strftime('%Y',expensedate) = strftime('%Y',date('now')) AND strftime('%m',expensedate) = strftime('%m',date('now')) GROUP BY category ORDER BY COUNT(category) DESC",
+    results = db.session.execute("SELECT category, COUNT(category) as count, SUM(amount) as amount FROM expenses WHERE user_id = :usersID AND EXTRACT(YEAR FROM expensedate) = EXTRACT(YEAR FROM now()) AND EXTRACT(MONTH FROM expensedate) = EXTRACT(MONTH FROM now()) GROUP BY category ORDER BY COUNT(category) DESC",
                          {"usersID": userID}).fetchall()
     categories = convertSQLToDict(results)
 
@@ -71,7 +71,7 @@ def getCurrentMthSpendingTrends(userID):
     # Get and return the users total spend for the current month
 def getTotalSpend_Month(userID):
     results = db.session.execute(
-        "SELECT SUM(amount) AS expenses_month FROM expenses WHERE user_id = :usersID AND strftime('%Y',expensedate) = strftime('%Y',date('now')) AND strftime('%m',expensedate) = strftime('%m',date('now'))",
+        "SELECT SUM(amount) AS expenses_month FROM expenses WHERE user_id = :usersID AND EXTRACT(YEAR FROM expensedate) = EXTRACT(YEAR FROM now()) AND EXTRACT(MONTH FROM expensedate) = EXTRACT(MONTH FROM now())",
         {"usersID": userID}).fetchall()
 
     totalSpendMonth = convertSQLToDict(results)
@@ -84,7 +84,7 @@ def getSpendingTrends(userID):
     categoryTrend = {"name": None, "proportionalAmount": None,
                      "totalSpent": None, "totalCount": None}
 
-    results = db.session.execute("SELECT category, COUNT(category) as count, SUM(amount) as amount FROM expense WHERE user_id = :usersID AND strftime('%Y',expensedate) = strftime('%Y',date('now')) AND strftime('%m',expensedate) = strftime('%m',date('now')) GROUP BY category ORDER BY COUNT(category) DESC",
+    results = db.session.execute("SELECT category, COUNT(category) as count, SUM(amount) as amount FROM expense WHERE user_id = :usersID AND EXTRACT(YEAR FROM expensedate) = EXTRACT(YEAR FROM now()) AND EXTRACT(MONTH FROM expensedate) = EXTRACT(MONTH FROM now()) GROUP BY category ORDER BY COUNT(category) DESC",
                          {"usersID": userID}).fetchall()
     categories = convertSQLToDict(results)
 
@@ -110,8 +110,8 @@ def getSpendingTrends(userID):
     # Get and return the users total spend for the each month
 def getTotalMonthlySpend(userID):
     results = db.session.execute(
-        "SELECT SUM(amount) AS amount, strftime('%m', expensedate) AS month, strftime('%Y', expensedate) AS year from expenses \
-        WHERE user_id = :usersID GROUP BY strftime('%m', expensedate)+strftime('%Y', expensedate) \
+        "SELECT SUM(amount) AS amount, EXTRACT(MONTH FROM expensedate) AS month, EXTRACT(YEAR FROM expensedate) AS year from expenses \
+        WHERE user_id = :usersID GROUP BY EXTRACT(MONTH FROM expensedate)+EXTRACT(YEAR FROM expensedate) \
         ORDER BY YEAR DESC, MONTH DESC ",
         {"usersID": userID}).fetchall()
 
@@ -123,8 +123,8 @@ def getTotalMonthlySpend(userID):
     # Get and return the users total spend for the each month
 def getTotalMonthlySpendJson(userID):
     results = db.session.execute(
-        "SELECT SUM(amount) AS amount, strftime('%m', expensedate) AS month, strftime('%Y', expensedate) AS year from expenses \
-        WHERE user_id = :usersID GROUP BY strftime('%m', expensedate)+strftime('%Y', expensedate) \
+        "SELECT SUM(amount) AS amount, EXTRACT(MONTH FROM expensedate) AS month, EXTRACT(YEAR FROM expensedate) AS year from expenses \
+        WHERE user_id = :usersID GROUP BY EXTRACT(MONTH FROM expensedate)+EXTRACT(YEAR FROM expensedate) \
         ORDER BY YEAR DESC, MONTH DESC ",
         {"usersID": userID}).fetchall()
 
