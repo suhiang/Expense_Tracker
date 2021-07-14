@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from os import path, environ
+import os
 from flask_login import LoginManager
 
 db = SQLAlchemy()
@@ -9,10 +9,9 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    # app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
+    app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     # app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    app.config['SQLALCHEMY_DATABASE_URI'] = environ['DATABASE_URL']
-
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DB_URL']
     db.init_app(app)
 
     from .views import views
@@ -38,7 +37,7 @@ def create_app():
 
 # def create_database(app):
 #     from .models import Categories
-#     if not path.exists('website/' + DB_NAME):
+#     if not os.path.exists('website/' + DB_NAME):
 #         db.create_all(app=app)
 #         print('Created Database!')
 
