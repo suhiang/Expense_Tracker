@@ -111,7 +111,7 @@ def getSpendingTrends(userID):
 def getTotalMonthlySpend(userID):
     results = db.session.execute(
         "SELECT SUM(amount) AS amount, EXTRACT(MONTH FROM expensedate) AS month, EXTRACT(YEAR FROM expensedate) AS year from expenses \
-        WHERE user_id = :usersID GROUP BY EXTRACT(MONTH FROM expensedate)+EXTRACT(YEAR FROM expensedate) \
+        WHERE user_id = :usersID GROUP BY EXTRACT(MONTH FROM expensedate),EXTRACT(YEAR FROM expensedate) \
         ORDER BY YEAR DESC, MONTH DESC ",
         {"usersID": userID}).fetchall()
 
@@ -124,7 +124,7 @@ def getTotalMonthlySpend(userID):
 def getTotalMonthlySpendJson(userID):
     results = db.session.execute(
         "SELECT SUM(amount) AS amount, EXTRACT(MONTH FROM expensedate) AS month, EXTRACT(YEAR FROM expensedate) AS year from expenses \
-        WHERE user_id = :usersID GROUP BY EXTRACT(MONTH FROM expensedate)+EXTRACT(YEAR FROM expensedate) \
+        WHERE user_id = :usersID GROUP BY EXTRACT(MONTH FROM expensedate),EXTRACT(YEAR FROM expensedate) \
         ORDER BY YEAR DESC, MONTH DESC ",
         {"usersID": userID}).fetchall()
 
