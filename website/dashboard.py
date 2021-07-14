@@ -84,7 +84,7 @@ def getSpendingTrends(userID):
     categoryTrend = {"name": None, "proportionalAmount": None,
                      "totalSpent": None, "totalCount": None}
 
-    results = db.session.execute("SELECT category, COUNT(category) as count, SUM(amount) as amount FROM expense WHERE user_id = :usersID AND EXTRACT(YEAR FROM expensedate) = EXTRACT(YEAR FROM now()) AND EXTRACT(MONTH FROM expensedate) = EXTRACT(MONTH FROM now()) GROUP BY category ORDER BY COUNT(category) DESC",
+    results = db.session.execute("SELECT category, COUNT(category) as count, SUM(amount) as amount FROM expenses WHERE user_id = :usersID AND EXTRACT(YEAR FROM expensedate) = EXTRACT(YEAR FROM now()) AND EXTRACT(MONTH FROM expensedate) = EXTRACT(MONTH FROM now()) GROUP BY category ORDER BY COUNT(category) DESC",
                          {"usersID": userID}).fetchall()
     categories = convertSQLToDict(results)
 
