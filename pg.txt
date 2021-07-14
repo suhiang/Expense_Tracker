@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS expenses (
         category VARCHAR(100),
         expensedate timestamp ,
         amount FLOAT,
-        submittime timestamp , 
+        submittime timestamp ,
 	user_id INTEGER,
 	FOREIGN KEY(user_id) REFERENCES users (id)
 );
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS notes (
         id SERIAL PRIMARY KEY,
         data VARCHAR(10000),
         date timestamp ,
-        user_id INTEGER, 
+        user_id INTEGER,
 	description VARCHAR(100),
         FOREIGN KEY(user_id) REFERENCES users (id)
 );
