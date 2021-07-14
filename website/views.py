@@ -1,7 +1,7 @@
 import requests
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
-from .models import Note, Categories, Expense
+from .models import Notes, Categories, Expenses
 from . import db
 import json
 from datetime import datetime
@@ -24,7 +24,7 @@ def expenses():
         if len(description) < 1:
             flash('Description is too short!', category='error')
         else:
-            new_expense = Expense(description=description, category=category, expensedate=expensedate, amount=amount, submittime=submittime, user_id=current_user.id)
+            new_expense = Expenses(description=description, category=category, expensedate=expensedate, amount=amount, submittime=submittime, user_id=current_user.id)
             db.session.add(new_expense)
             db.session.commit()
             flash('Expense added!', category='success')
@@ -40,7 +40,7 @@ def expenses():
     expensesMonthly = dashboard.getTotalMonthlySpend(current_user.id)
     print('Monthly Spending',expensesMonthly)
 
-    items = Expense.query.all()
+    items = Expenses.query.all()
     categories = Categories.query.all()
 
     return render_template("expense.html", user=current_user, expenses=items, categories=categories)
@@ -50,7 +50,7 @@ def expenses():
 def delete_expense():
     expense = json.loads(request.data)
     expenseId = expense['expenseId']
-    expense = Expense.query.get(expenseId)
+    expense = Expenses.query.get(expenseId)
     print(expenseId)
     if expense:
        db.session.delete(expense)
@@ -67,7 +67,7 @@ def home():
         if len(note) < 1:
             flash('Note is too short!', category='error')
         else:
-            new_note = Note(data=note, user_id=current_user.id)
+            new_note = Notes(data=note, user_id=current_user.id)
             db.session.add(new_note)
             db.session.commit()
             flash('Note added!', category='success')
@@ -79,7 +79,7 @@ def home():
 def delete_note():
     note = json.loads(request.data)
     noteId = note['noteId']
-    note = Note.query.get(noteId)
+    note = Notes.query.get(noteId)
     if note:
         if note.user_id == current_user.id:
             db.session.delete(note)

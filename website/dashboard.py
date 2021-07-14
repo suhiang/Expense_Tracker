@@ -5,7 +5,7 @@ from functools import wraps
 
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
-from .models import Note, Categories, Expense
+from .models import Notes, Categories, Expenses
 from . import db
 import json
 from datetime import datetime
