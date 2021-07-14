@@ -31,14 +31,14 @@ def expenses():
 
         print(request.form.get('expensedate'))
 
-    expensesCurrentmonth = dashboard.getTotalSpend_Month(current_user.id)
-    print('Total expense for this month',expensesCurrentmonth)
+    # expensesCurrentmonth = dashboard.getTotalSpend_Month(current_user.id)
+    # print('Total expense for this month',expensesCurrentmonth)
 
-    SpendingTrends = dashboard.getSpendingTrends(current_user.id)
-    print('Spending Trends for this month',SpendingTrends)
+    # SpendingTrends = dashboard.getSpendingTrends(current_user.id)
+    # print('Spending Trends for this month',SpendingTrends)
 
-    expensesMonthly = dashboard.getTotalMonthlySpend(current_user.id)
-    print('Monthly Spending',expensesMonthly)
+    # expensesMonthly = dashboard.getTotalMonthlySpend(current_user.id)
+    # print('Monthly Spending',expensesMonthly)
 
     items = Expenses.query.all()
     categories = Categories.query.all()
