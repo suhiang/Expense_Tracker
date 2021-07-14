@@ -71,7 +71,7 @@ def getCurrentMthSpendingTrends(userID):
     # Get and return the users total spend for the current month
 def getTotalSpend_Month(userID):
     results = db.session.execute(
-        "SELECT SUM(amount) AS expenses_month FROM expense WHERE user_id = :usersID AND strftime('%Y',expensedate) = strftime('%Y',date('now')) AND strftime('%m',expensedate) = strftime('%m',date('now'))",
+        "SELECT SUM(amount) AS expenses_month FROM expenses WHERE user_id = :usersID AND strftime('%Y',expensedate) = strftime('%Y',date('now')) AND strftime('%m',expensedate) = strftime('%m',date('now'))",
         {"usersID": userID}).fetchall()
 
     totalSpendMonth = convertSQLToDict(results)
