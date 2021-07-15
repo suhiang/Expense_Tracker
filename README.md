@@ -65,7 +65,7 @@ Go to `http://127.0.0.1:5000`
         - suitability
         - support
         - features
-4. Decide on a host for the Python Flash App
+4. Decide on a host for the Python Flask App
     - Heroku : [e.g](https://realpython.com/flask-by-example-part-1-project-setup/)
 
 
