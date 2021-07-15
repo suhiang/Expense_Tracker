@@ -8,6 +8,9 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from . import dashboard
 import requests
+from sqlalchemy import asc, desc
+
+from website import models
 
 views = Blueprint('views', __name__)
 
@@ -41,10 +44,9 @@ def expenses():
     # print('Monthly Spending',expensesMonthly)
 
     items = Expenses.query.all()
-    categories = Categories.query.all()
+    categories = Categories.query.order_by(Categories.name).all()
 
     return render_template("expense.html", user=current_user, expenses=items, categories=categories)
-
 
 @views.route('/delete-expense', methods=['POST'])
 def delete_expense():
@@ -90,7 +92,9 @@ def delete_note():
 @views.route('/categories', methods=['GET', 'POST'])
 @login_required
 def categories():
-    items = Categories.query.all()
+    # items = Categories.query.all()
+    items = Categories.query.order_by(Categories.name).all()
+
     if request.method == 'POST':
         categoryname = request.form.get('category').strip()
         if not categoryname in map(lambda x: x.name,items):
@@ -103,7 +107,7 @@ def categories():
                 flash('Category added!', category='success')
         else:
             flash('Exist', category='error')
-    items = Categories.query.all()
+    # items = Categories.query.all()
     return render_template("category.html", user=current_user, categories=items)
 
 @views.route('/delete-category', methods=['POST'])

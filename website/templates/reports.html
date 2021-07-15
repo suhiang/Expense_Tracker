@@ -14,9 +14,9 @@
   <tbody>
     {% for item in expensesMonthly %}
       <tr>
-        <th scope="row">{{ item.year }}</th>
-        <th scope="row">{{ item.month }}</th>
-        <th scope="row">{{ item.amount }}</th>
+        <th scope="row">{{ item.year|int }}</th>
+        <th scope="row">{{ item.month|int }}</th>
+        <th scope="row">{{ "$%.2f"|format(item.amount) }}</th>
       </tr>
   {% endfor %}
   </tbody>
@@ -25,14 +25,20 @@
 <table class="table">
   <tr>
       {% for key in expensesMonthly[0] %}
-      <th>{{ key }}</th>
+      <th>{{ key.capitalize() }}</th>
       {% endfor %}
   </tr>
-
+  <hr>
+  ** Testing **
+  <h3 align="center">Testing</h1>
   {% for expenseMonthly in expensesMonthly %}
   <tr>
       {% for key in expenseMonthly %}
-      <td>{{ expenseMonthly[key] }}</td>
+        {% if key=="amount" %}
+          <td>{{ "$%.2f"|format(expenseMonthly[key]) }}</td>
+        {% else %}
+          <td>{{ expenseMonthly[key]|int }}</td>
+        {% endif %}
       {% endfor %}
   </tr>
   {% endfor %}
