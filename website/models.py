@@ -15,7 +15,7 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     notes = db.relationship('Notes')
-    expenses = db.relationship('Expenses')
+    expenses = db.relationship('Expenses', order_by='Expenses.expensedate')
 
 class Categories(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -43,7 +43,8 @@ def expenses():
     # expensesMonthly = dashboard.getTotalMonthlySpend(current_user.id)
     # print('Monthly Spending',expensesMonthly)
 
-    items = Expenses.query.all()
+    # items = Expenses.query.all()
+    items = Expenses.query.order_by(Expenses.expensedate).all()
     categories = Categories.query.order_by(Categories.name).all()
 
     return render_template("expense.html", user=current_user, expenses=items, categories=categories)
