@@ -93,10 +93,8 @@ def delete_note():
 @views.route('/categories', methods=['GET', 'POST'])
 @login_required
 def categories():
-    # items = Categories.query.all()
-    items = Categories.query.order_by(Categories.name).all()
-
     if request.method == 'POST':
+        items = Categories.query.all()
         categoryname = request.form.get('category').strip()
         if not categoryname in map(lambda x: x.name,items):
             if len(categoryname) < 1:
@@ -108,7 +106,7 @@ def categories():
                 flash('Category added!', category='success')
         else:
             flash('Exist', category='error')
-    # items = Categories.query.all()
+    items = Categories.query.order_by(Categories.name).all()
     return render_template("category.html", user=current_user, categories=items)
 
 @views.route('/delete-category', methods=['POST'])
