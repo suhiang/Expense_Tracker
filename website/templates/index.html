@@ -1,0 +1,141 @@
+{% extends "base.html" %} {% block title %}Expenses{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+            <div class="jumbotron p-3">
+                <h2>Manage <b>Expenses </b> <button type="button" class="btn btn-success float-right"
+                        data-toggle="modal" data-target="#mymodal">Add New Expense</button> </h2>
+                <table class="table table-hover table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Expense Date</th>
+                        <th>Amount</th>
+                        <th>Submitted Date</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for row in user.expenses %}
+                    <tr>
+                        <th>{{ row.id }}</th>
+                        <td>{{ row.description }}</td>
+                        <td>{{ row.category }}</td>
+                        <td>{{ row.expensedate.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ "$%.2f"|format(row.amount) }}</td>
+                        <td>{{ row.submittime.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            <a href="/updateexpense/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal"
+                                data-target="#modaledit{{row.id}}">Edit</a>
+                            <a href="/deleteexpense/{{row.id}}" class="btn btn-danger btn-xs"
+                                onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+                        </td>
+                    </tr>
+
+                    <!-- Modal Edit Expense -->
+                    <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Update Information</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ url_for('views.updateexpense') }}" method="POST">
+                                        <!-- <div class="form-group"> -->
+                                        <!-- <label>ID:</label> -->
+                                        <input type="hidden" name="id" value="{{row.id}}">
+                                        <!-- <input type="hidden" class="form-control" name="idx" value="{{row.id}}"> -->
+                                        <!-- </div> -->
+                                        <div class="form-group">
+                                            <label>Description:</label>
+                                            <input type="text" class="form-control" name="description"
+                                                value="{{row.description}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Category:</label>
+                                            <!--input type="text" class="form-control" name="category" required="1"-->
+                                            <select class="custom-select" name="category" size="1" required="1"
+                                                value="{{row.category}}">
+                                                <!-- <option selected disabled>Open this select menu</option> -->
+                                                {% for category in categories %}
+                                                <option value="{{ category.name }}">{{ category.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <!--<div class="form-group">
+                                    <label>Category:</label>
+                                    <input type="text" class="form-control" name="category" value="{{row.category}}">
+                                </div>-->
+                                        <div class="form-group">
+                                            <label>Expense Date:</label>
+                                            <input type="date" class="form-control" name="expensedate"
+                                                value="{{ row.expensedate.strftime('%Y-%m-%d') }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Amount:</label>
+                                            <input type="number" step=0.01 class="form-control" name="amount"
+                                                value="{{row.amount}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary" type="submit">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </table>
+            </div>
+            <!-- Modal Add Expense -->
+            <div id="mymodal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Expense</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ url_for('views.insertexpense') }}" method="POST">
+                                <div class="form-group">
+                                    <label>Description:</label>
+                                    <input type="text" class="form-control" name="description" required="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category:</label>
+                                    <!--input type="text" class="form-control" name="category" required="1"-->
+                                    <select class="form-control" name="category" size="1" required="1">
+                                        <!-- <option selected disabled>Open this select menu</option> -->
+                                        {% for category in categories %}
+                                        <option value="{{ category.name }}">{{ category.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Expense Date:</label>
+                                    <input type="date" class="form-control" name="expensedate" required="1"
+                                    value="{{ dateToday.strftime('%Y-%m-%d') }}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Amount:</label>
+                                    <input type="number" step=0.01 class="form-control" name="amount" required="1">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit">Add Expense</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

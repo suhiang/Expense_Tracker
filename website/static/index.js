@@ -24,4 +24,3 @@ function deleteExpense(expenseId) {
     window.location.href = "/";
   });
 }
-

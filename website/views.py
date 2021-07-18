@@ -1,5 +1,5 @@
 import requests
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from .models import Notes, Categories, Expenses
 from . import db
@@ -45,9 +45,11 @@ def expenses():
 
     # items = Expenses.query.all()
     items = Expenses.query.order_by(Expenses.expensedate).all()
+    dateToday = datetime.now()
     categories = Categories.query.order_by(Categories.name).all()
 
-    return render_template("expense.html", user=current_user, expenses=items, categories=categories)
+    return render_template("expense.html", user=current_user, expenses=items, categories=categories, dateToday=dateToday)
+    # return render_template("index.html", user=current_user, expenses=items, categories=categories)
 
 @views.route('/delete-expense', methods=['POST'])
 def delete_expense():
@@ -60,6 +62,56 @@ def delete_expense():
        db.session.commit()
 
     return jsonify({})
+
+#This route is for deleting our employee
+@views.route('/deleteexpense/<id>/', methods = ['GET', 'POST'])
+def deleteexpense(id):
+    my_data = Expenses.query.get(id)
+    db.session.delete(my_data)
+    db.session.commit()
+    flash("Expense Deleted Successfully")
+
+    return redirect(url_for('views.expenses'))
+
+#this route is for inserting data to y
+# database via html forms
+@views.route('/insertexpense', methods = ['POST'])
+@login_required
+def insertexpense():
+
+    if request.method == 'POST':
+        description = request.form.get('description')
+        category = request.form.get('category')
+        expensedate = datetime.strptime(request.form.get('expensedate'),'%Y-%m-%d')
+        amount = request.form.get('amount')
+        submittime = datetime.now()
+        new_expense = Expenses(description=description, category=category, expensedate=expensedate, amount=amount, submittime=submittime, user_id=current_user.id)
+        db.session.add(new_expense)
+        db.session.commit()
+
+        flash("Expense Inserted Successfully")
+
+        return redirect(url_for('views.expenses'))
+        # return render_template("home.html", user=current_user)
+
+#this is our update route where we are going to update our expense
+@views.route('/updateexpense', methods = ['GET', 'POST'])
+@login_required
+def updateexpense():
+
+    if request.method == 'POST':
+        my_data = Expenses.query.get(request.form.get('id'))
+        my_data.description = request.form.get('description')
+        my_data.category = request.form.get('category')
+        my_data.expensedate = datetime.strptime(request.form.get('expensedate'),'%Y-%m-%d')
+        my_data.amount = request.form.get('amount')
+        my_data.submittime = datetime.now()
+        print(my_data)
+        db.session.commit()
+        flash("Expense Updated Successfully")
+
+        return redirect(url_for('views.expenses'))
+
 
 @views.route('/notes', methods=['GET', 'POST'])
 @login_required
