@@ -21,9 +21,15 @@ Do design the following based on your expertise and frameworks that you are comf
 
 ## Components used
 1. Python Flask
-2. SQLite
+2. SQLite - Migrated to Heroku Postgres
 2. SQL Alchemy
 3. Bootstrap
+4. Python requirements
+    1. gunicorn (for Heroku deployment)
+    2. flask
+    3. Flask-SQLAlchemy
+    4. flask-login
+    5. requests
 
 ## Setup & Installation
 
@@ -55,8 +61,17 @@ Go to `http://127.0.0.1:5000`
 
 ## Notes:
 1. Initial report is currently limited to current month spending.
-2. rewrite APIs to handle query parameters
-    1. Scenarios to GET various expense using API request with parameters like year and month (and userId)
+2. rewrite APIs
+    1. Cleanup URIs naming
+        - naming convention - Never use CRUD function names in URIs
+        - Use lowercase letters in URIs
+        - Do not use underscores ( _ )
+        - Use hyphens (-) to improve the readability of URIs
+        - Do not use trailing forward slash (/) in URIs
+        - Use forward slash (/) to indicate hierarchical relationships
+    2. Use query component to filter URI collection
+    3. to handle query parameters
+        - Scenarios to GET various expense using API request with parameters like year and month (and userId)
 3. Add/Enhanced GUI
     1. Explore methods to display expense: Tabular versus Charts
     2. Scout approach for Charts

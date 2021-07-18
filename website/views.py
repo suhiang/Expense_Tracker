@@ -63,7 +63,7 @@ def delete_expense():
 
     return jsonify({})
 
-#This route is for deleting our employee
+# This route is for deleting expense
 @views.route('/deleteexpense/<id>/', methods = ['GET', 'POST'])
 def deleteexpense(id):
     my_data = Expenses.query.get(id)
